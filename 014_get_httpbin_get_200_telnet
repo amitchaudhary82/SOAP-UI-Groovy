@@ -23,41 +23,34 @@ def httpConnection = (HttpURLConnection) urlConnection
 //------------------------------------------------------------
 httpConnection.setRequestMethod("GET")
 httpConnection.setRequestProperty("Connection", "close")
-
+def requestCount = 0
 
 //------------------------------------------------------------
 // Step 5: Send request and read response
 //------------------------------------------------------------
 try {
 
-    int httpResponseCode = httpConnection.responseCode
-    String httpResponseMessage = httpConnection.responseMessage
+	requestCount = requestCount + 1
+	def httpResponseCode = httpConnection.responseCode
+	def httpResponseMessage = httpConnection.responseMessage
+	def httpResponseContentType = httpConnection.contentType
+	def httpResponseContentLength = httpConnection.contentLength
+	
+	// old style
+	log.info(
+    		"[" + requestCount + "] : Response: " +
+    		httpResponseCode + " " + httpResponseMessage +
+    		" (" + httpResponseContentType + ")" +
+    		", " + httpResponseContentLength + " Bytes")
 
-    log.info "Response Code: " + httpResponseCode
-    log.info "Response Message: " + httpResponseMessage
+	// new style using ${expression}
+	log.info(
+ 		"[${requestCount}] : Response: " +
+    		"${httpResponseCode} ${httpResponseMessage} " +
+    		"(${httpResponseContentType}), " +
+    		"${httpResponseContentLength} Bytes")        
+        								
 
-
-    //--------------------------------------------------------
-    // Response Headers
-    //--------------------------------------------------------
-    log.info ""
-    log.info "----- Response Headers -----"
-
-    httpConnection.headerFields.each { headerName, headerValue ->
-        log.info "${headerName}: ${headerValue}"
-    }
-
-
-    //--------------------------------------------------------
-    // Response Body
-    //--------------------------------------------------------
-    log.info ""
-    log.info "----- Response Body -----"
-
-    String httpResponseBody =
-            httpConnection.inputStream.getText("UTF-8")
-
-    log.info httpResponseBody
 }
 
 
