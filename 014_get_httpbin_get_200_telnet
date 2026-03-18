@@ -1,1 +1,79 @@
-tst
+//------------------------------------------------------------
+// Step 1: Create URL object
+//------------------------------------------------------------
+def httpUrl = new URL("https://httpbin.org/")
+
+
+//------------------------------------------------------------
+// Step 2: Open generic connection
+// Could be HTTP / HTTPS / FTP / FILE / JAR etc.
+//------------------------------------------------------------
+def urlConnection = httpUrl.openConnection()
+
+
+//------------------------------------------------------------
+// Step 3: Cast to HttpURLConnection
+// Required to use HTTP specific functions
+//------------------------------------------------------------
+def httpConnection = (HttpURLConnection) urlConnection
+
+
+//------------------------------------------------------------
+// Step 4: Set HTTP request properties
+//------------------------------------------------------------
+httpConnection.setRequestMethod("GET")
+httpConnection.setRequestProperty("Connection", "close")
+
+
+//------------------------------------------------------------
+// Step 5: Send request and read response
+//------------------------------------------------------------
+try {
+
+    int httpResponseCode = httpConnection.responseCode
+    String httpResponseMessage = httpConnection.responseMessage
+
+    log.info "Response Code: " + httpResponseCode
+    log.info "Response Message: " + httpResponseMessage
+
+
+    //--------------------------------------------------------
+    // Response Headers
+    //--------------------------------------------------------
+    log.info ""
+    log.info "----- Response Headers -----"
+
+    httpConnection.headerFields.each { headerName, headerValue ->
+        log.info "${headerName}: ${headerValue}"
+    }
+
+
+    //--------------------------------------------------------
+    // Response Body
+    //--------------------------------------------------------
+    log.info ""
+    log.info "----- Response Body -----"
+
+    String httpResponseBody =
+            httpConnection.inputStream.getText("UTF-8")
+
+    log.info httpResponseBody
+}
+
+
+//------------------------------------------------------------
+// Step 6: Exception Handling
+//------------------------------------------------------------
+catch (Exception httpError) {
+
+    log.info "Error: " + httpError
+}
+
+
+//------------------------------------------------------------
+// Step 7: Disconnect connection
+//------------------------------------------------------------
+finally {
+
+    httpConnection.disconnect()
+}
