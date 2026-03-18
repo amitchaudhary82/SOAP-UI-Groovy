@@ -1,0 +1,104 @@
+============================================================
+URLConnection / HttpURLConnection / HttpsURLConnection
+============================================================
+
+Hierarchy (simplified)
+
+URLConnection
+   |
+   +-- HttpURLConnection      // used for HTTP-style connections
+   |       |
+   |       +-- HttpsURLConnection   // for https://
+   |
+   +-- JarURLConnection       // for jar://
+   +-- FileURLConnection      // for file://
+   +-- FtpURLConnection       // for ftp:// (implementation dependent)
+
+
+------------------------------------------------------------
+URLConnection  (generic connection)
+------------------------------------------------------------
+Returned by:
+new URL(...).openConnection()
+
+Common methods:
+- connect()
+- getInputStream()
+- getOutputStream()
+- getHeaderFields()
+- getHeaderField(String name)
+- getContentType()
+- getContentLength()
+- setConnectTimeout(int ms)
+- setReadTimeout(int ms)
+- setDoInput(true/false)
+- setDoOutput(true/false)
+- setUseCaches(true/false)
+- getURL()
+
+Not available here (HTTP-specific):
+- setRequestMethod()
+- setRequestProperty()
+- getResponseCode()
+- getResponseMessage()
+- disconnect()
+
+
+------------------------------------------------------------
+HttpURLConnection  (HTTP-specific methods)
+------------------------------------------------------------
+Usually used by casting:
+
+def urlConnection = httpUrl.openConnection()
+def httpConnection = (HttpURLConnection) urlConnection
+
+Common HTTP methods:
+- setRequestMethod("GET")
+- setRequestMethod("POST")
+- setRequestMethod("PUT")
+- setRequestMethod("DELETE")
+- setRequestProperty(String name, String value)
+- getResponseCode()
+- getResponseMessage()
+- getErrorStream()
+- disconnect()
+- setInstanceFollowRedirects(true/false)
+
+Common request headers:
+- setRequestProperty("Content-Type", "application/json")
+- setRequestProperty("Connection", "close")
+- setRequestProperty("Accept", "application/json")
+
+
+------------------------------------------------------------
+HttpsURLConnection  (HTTPS / SSL-specific methods)
+------------------------------------------------------------
+Same as HttpURLConnection, plus SSL-related methods:
+- setSSLSocketFactory(...)
+- setHostnameVerifier(...)
+- getCipherSuite()
+- getLocalCertificates()
+- getServerCertificates()
+
+Used when URL starts with:
+https://
+
+
+------------------------------------------------------------
+Typical Groovy usage
+------------------------------------------------------------
+
+def httpUrl = new URL("https://httpbin.org/")
+def urlConnection = httpUrl.openConnection()
+def httpConnection = (HttpURLConnection) urlConnection
+
+httpConnection.setRequestMethod("GET")
+httpConnection.setRequestProperty("Connection", "close")
+
+int code = httpConnection.responseCode
+String body = httpConnection.inputStream.getText("UTF-8")
+
+httpConnection.disconnect()
+
+============================================================
+*/
