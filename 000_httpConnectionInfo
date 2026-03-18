@@ -24,7 +24,7 @@ new URL(...).openConnection()
 Common methods:
 - connect()
 - getInputStream()
-- getOutputStream()
+- getOutputStream()   This opens the channel where you send the request body. In telnet, after headers and blank line, you typed: hello world, In Groovy, that body is sent through the output stream.
 - getHeaderFields()
 - getHeaderField(String name)
 - getContentType()
@@ -32,7 +32,7 @@ Common methods:
 - setConnectTimeout(int ms)
 - setReadTimeout(int ms)
 - setDoInput(true/false)
-- setDoOutput(true/false)
+- setDoOutput(true/false)  (this connection will send data out to the server, false = I only want to read response, true = I will also write request body)
 - setUseCaches(true/false)
 - getURL()
 
