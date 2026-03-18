@@ -102,3 +102,46 @@ httpConnection.disconnect()
 
 ============================================================
 */
+
+
+
+
+
+------------------------------------------------------------
+Variable usage
+------------------------------------------------------------
+$ means → insert value
+{} means → evaluate expression inside
+
+instead of writing
+"Response: " + httpResponseCode
+log.info("Response: " + httpResponseCode)
+
+This means:
+take text "Response: "
+add variable value
+make one string
+
+
+but in Groovy, you can write
+"Response: ${httpResponseCode}"
+inside this string, insert the value of httpResponseCode
+
+This will fail
+"$httpResponseCodeBytes"
+as Groovy may think variable name is:
+httpResponseCodeBytes
+
+So we write:
+"${httpResponseCode} Bytes"
+
+Now Groovy knows where variable ends.
+That is why ${} is safer.
+
+so ols style
+log.info("Response: " + httpResponseCode + " " + httpResponseMessage)
+
+new style
+log.info("Response: ${httpResponseCode} ${httpResponseMessage}")
+
+
