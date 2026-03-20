@@ -28,7 +28,7 @@ httpConnection.setRequestMethod("POST")
 httpConnection.setRequestProperty("Content-Type", "text/plain")
 httpConnection.setRequestProperty("Connection", "close")
 
-// Required for POST body output
+// Required to send request body
 // false = only read response
 // true  = send request body also
 httpConnection.setDoOutput(true)
@@ -39,11 +39,55 @@ httpConnection.setDoOutput(true)
 //------------------------------------------------------------
 def requestBody = "hello world"
 
-// Open output channel to send request body
+// Open output stream
+// Connection point of view, he sends output to Server
 def outputStream = httpConnection.getOutputStream()
 
-// Convert text to UTF-8 bytes and send them
+// Flow of request body:
+// requestBody → getBytes() → byte[] → outputStream.write(...) → HTTP body
+
+/*
+requestBody (String)
+      |
+      | getBytes()
+      v
+byte[] (UTF-8)
+      |
+      | outputStream.write(...)
+      v
+HTTP request body sent
+*/
+
+// Convert request text to bytes
+def requestBytes = requestBody.getBytes("UTF-8")
+
+// Write bytes to output stream
+outputStream.write(requestBytes)
+
+
+//------------------------------------------------------------
+// Same logic can also be written in one line
+//------------------------------------------------------------
+/*
+Java / Groovy often prefers:
+
+function(otherFunction())
+
+instead of:
+
+tmp = otherFunction()
+function(tmp)
+
+Example:
+
 outputStream.write(requestBody.getBytes("UTF-8"))
+
+Execution order is:
+1. evaluate inside brackets first
+2. requestBody.getBytes("UTF-8") returns byte[]
+3. outputStream.write(byte[]) is called
+*/
+
 
 // Force any buffered bytes to be sent
 outputStream.flush()
@@ -62,15 +106,23 @@ try {
     def httpResponseContentType = httpConnection.contentType
     def httpResponseContentLength = httpConnection.contentLength
 
+
     log.info(
-        "Response: ${httpResponseCode} ${httpResponseMessage} " +
-        "(${httpResponseContentType}), ${httpResponseContentLength} Bytes"
+        "Response: " + 
+        "${httpResponseCode} ${httpResponseMessage} | " +
+        "Type=(${httpResponseContentType}) | " +
+        "Length=${httpResponseContentLength} Bytes"
     )
 
-    log.info "----- Response Body -----"
+	// Get response stream
+	// Connection point of view, it receives input from Server
+	def responseStream = httpConnection.inputStream
 
-    def httpResponseBody = httpConnection.inputStream.getText("UTF-8")
-    log.info httpResponseBody
+	// Convert to text
+	def httpResponseBody = responseStream.getText("UTF-8")
+
+	log.info "----- Response Body -----"
+	log.info httpResponseBody
 }
 
 

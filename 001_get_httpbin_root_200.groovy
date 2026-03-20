@@ -37,11 +37,13 @@ try {
 	def httpResponseContentLength = httpConnection.contentLength
 	
 	// old style
+	/*
 	log.info(
     		"[" + requestCount + "] : Response: " +
     		httpResponseCode + " " + httpResponseMessage +
     		" (" + httpResponseContentType + ")" +
     		", " + httpResponseContentLength + " Bytes")
+	*/
 
 	// new style using ${expression}
 	log.info(
