@@ -145,3 +145,59 @@ new style
 log.info("Response: ${httpResponseCode} ${httpResponseMessage}")
 
 
+
+------------------------------------------------------------
+URL Methods (Functions)
+------------------------------------------------------------
+
+| Function         | Description (1 line)                      | Example Data                                     |
+| ---------------- | ----------------------------------------- | ------------------------------------------------ |
+| getProtocol()    | Returns protocol of URL                   | https                                            |
+| getHost()        | Returns hostname                          | httpbin.org                                      |
+| getPort()        | Returns port number, -1 if default        | -1                                               |
+| getDefaultPort() | Returns default port for protocol         | 443                                              |
+| getPath()        | Returns path part of URL                  | /ip                                              |
+| getFile()        | Returns path + query                      | /api/test?id=10                                  |
+| getQuery()       | Returns query string only                 | id=10&name=test                                  |
+| getAuthority()   | Returns host + port                       | httpbin.org:8080                                 |
+| getUserInfo()    | Returns username:password from URL        | user:pass                                        |
+| getRef()         | Returns fragment after #                  | part1                                            |
+| toString()       | Returns full URL as string                | [https://httpbin.org/ip](https://httpbin.org/ip) |
+| toURI()          | Converts URL to URI object                | [https://httpbin.org/ip](https://httpbin.org/ip) |
+| openConnection() | Opens connection to URL                   | HttpURLConnection                                |
+| openStream()     | Opens input stream directly (GET)         | InputStream                                      |
+| getContent()     | Returns content object from URL           | HTML / JSON                                      |
+| sameFile(URL)    | Checks if two URLs refer to same resource | true                                             |
+| toExternalForm() | Returns full URL string                   | [https://httpbin.org/ip](https://httpbin.org/ip) |
+
+
+
+
+------------------------------------------------------------
+HTTP URL Functions
+------------------------------------------------------------
+| Function                               | Description (1 line)          | Example Data     |
+| -------------------------------------- | ----------------------------- | ---------------- |
+| setRequestMethod(String)               | Sets HTTP method              | GET              |
+| getRequestMethod()                     | Returns HTTP method           | GET              |
+| setRequestProperty(name, value)        | Sets request header           | Connection=close |
+| getRequestProperty(name)               | Gets request header           | close            |
+| getRequestProperties()                 | Returns all request headers   | Map<String,List> |
+| getHeaderField(name)                   | Gets response header value    | application/json |
+| getHeaderFields()                      | Gets all response headers     | Map<String,List> |
+| getResponseCode()                      | Returns HTTP status code      | 200              |
+| getResponseMessage()                   | Returns status text           | OK               |
+| getInputStream()                       | Reads response body (success) | InputStream      |
+| getErrorStream()                       | Reads response body for error | InputStream      |
+| getOutputStream()                      | Sends request body            | OutputStream     |
+| setDoOutput(true/false)                | Enables sending request body  | true             |
+| setDoInput(true/false)                 | Enables reading response      | true             |
+| setConnectTimeout(ms)                  | Timeout for connection        | 5000             |
+| setReadTimeout(ms)                     | Timeout for read              | 5000             |
+| getContentType()                       | Returns response content type | application/json |
+| getContentLength()                     | Returns response length       | 32               |
+| setInstanceFollowRedirects(true/false) | Enable redirect handling      | true             |
+| disconnect()                           | Closes connection             | —                |
+| usingProxy()                           | Checks if proxy used          | false            |
+| connect()                              | Forces connection open        | —                |
+
